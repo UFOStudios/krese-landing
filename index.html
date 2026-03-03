@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Krese — Jouw doelen, jouw groei</title>
+<meta name="description" content="Krese is een premium goal-setting app gebouwd rondom persoonlijke reflectie. Reflecteer, definieer je visie, en werk gericht aan je doelen.">
+<meta name="theme-color" content="#7DA67D">
+<link rel="icon" type="image/png" href="../goal-tracker-app/public/icon-192x192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* ── ORGANIC MINIMALIST PALETTE ─────── */
+  :root {
+    /* Light Mode — "Fresh Parchment" */
+    --bg: #F8F9F5;
+    --bg-surface: #FFFFFF;
+    --bg-section: #F0F2EC;
+    --bg-card: #FFFFFF;
+    --text: #1B261E;
+    --text-secondary: #6B706B;
+    --text-muted: #8A948A;
+    --accent: #7DA67D;
+    --accent-dark: #5E8A5E;
+    --accent-light: #B5D4B5;
+    --accent-bg: rgba(125, 166, 125, 0.1);
+    --accent2: #C68B77;
+    --accent2-bg: rgba(198, 139, 119, 0.1);
+    --border: #DDE0D8;
+    --border-light: #E8EAE4;
+
+    /* Pillar colors (softened for organic palette) */
+    --pillar-health: #C85B5B;
+    --pillar-relationships: #C27092;
+    --pillar-growth: #8B72B0;
+    --pillar-spiritual: #C9A04E;
+    --pillar-career: #5B8BC8;
+    --pillar-financial: #5BA67D;
+    --pillar-fun: #4EA8B0;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      /* Dark Mode — "Midnight Garden" */
+      --bg: #0F1410;
+      --bg-surface: #1C241D;
+      --bg-section: #151B16;
+      --bg-card: #1C241D;
+      --text: #E0E8E0;
+      --text-secondary: #8A948A;
+      --text-muted: #6B766B;
+      --accent: #94C994;
+      --accent-dark: #7DB87D;
+      --accent-light: #3D5A3D;
+      --accent-bg: rgba(148, 201, 148, 0.12);
+      --accent2: #D4A090;
+      --accent2-bg: rgba(212, 160, 144, 0.1);
+      --border: #2A332B;
+      --border-light: #232C24;
+
+      --pillar-health: #D47070;
+      --pillar-relationships: #D08AAA;
+      --pillar-growth: #A990C6;
+      --pillar-spiritual: #D4B060;
+      --pillar-career: #70A0D4;
+      --pillar-financial: #70BA90;
+      --pillar-fun: #60BAC4;
+    }
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    color: var(--text);
+    background: var(--bg);
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.6;
+  }
+
+  h1, h2, h3 {
+    font-family: 'Lora', Georgia, 'Times New Roman', serif;
+  }
+
+  /* ── NAV ──────────────────────────────── */
+  nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: color-mix(in srgb, var(--bg) 92%, transparent);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border-light);
+    padding: 0 24px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: var(--text);
+  }
+  .nav-logo {
+    width: 32px;
+    height: 32px;
+    background: var(--accent);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 18px;
+  }
+  .nav-name {
+    font-family: 'Lora', Georgia, serif;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+  }
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+  }
+  .nav-link {
+    text-decoration: none;
+    color: var(--text-secondary);
+    font-size: 14px;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+  .nav-link:hover { color: var(--text); }
+  .nav-cta {
+    background: var(--accent);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+  .nav-cta:hover { background: var(--accent-dark); }
+  @media (max-width: 640px) {
+    .nav-links .nav-link { display: none; }
+  }
+
+  /* ── HERO ─────────────────────────────── */
+  .hero {
+    padding: 140px 24px 100px;
+    text-align: center;
+    max-width: 760px;
+    margin: 0 auto;
+  }
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--accent-bg);
+    color: var(--accent);
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 28px;
+    border: 1px solid var(--accent-light);
+  }
+  .hero h1 {
+    font-size: clamp(40px, 7vw, 64px);
+    font-weight: 700;
+    line-height: 1.08;
+    letter-spacing: -1.5px;
+    margin-bottom: 24px;
+    color: var(--text);
+  }
+  .hero h1 em {
+    color: var(--accent);
+    font-style: normal;
+  }
+  .hero-subtitle {
+    font-size: clamp(17px, 2.5vw, 19px);
+    color: var(--text-secondary);
+    max-width: 540px;
+    margin: 0 auto 40px;
+    line-height: 1.7;
+  }
+  .hero-cta-group {
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .btn-primary {
+    background: var(--accent);
+    color: white;
+    border: none;
+    padding: 16px 36px;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s;
+  }
+  .btn-primary:hover { background: var(--accent-dark); transform: translateY(-1px); }
+  .btn-outline {
+    background: transparent;
+    color: var(--accent);
+    border: 2px solid var(--border);
+    padding: 14px 34px;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s;
+  }
+  .btn-outline:hover { border-color: var(--accent); background: var(--accent-bg); }
+
+  /* ── SECTIONS ────────────────────────── */
+  section { padding: 100px 24px; }
+  .section-alt { background: var(--bg-section); }
+  .container { max-width: 1080px; margin: 0 auto; }
+
+  .section-eyebrow {
+    display: inline-block;
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 12px;
+  }
+  .section-title {
+    font-size: clamp(30px, 4.5vw, 44px);
+    font-weight: 700;
+    line-height: 1.15;
+    margin-bottom: 16px;
+    letter-spacing: -0.8px;
+  }
+  .section-desc {
+    font-size: 17px;
+    color: var(--text-secondary);
+    max-width: 560px;
+    line-height: 1.7;
+  }
+
+  /* ── JOURNEY TIMELINE ───────────────── */
+  .journey-steps {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0;
+    margin-top: 56px;
+    position: relative;
+  }
+  .journey-steps::before {
+    content: '';
+    position: absolute;
+    top: 24px;
+    left: 10%;
+    right: 10%;
+    height: 2px;
+    background: var(--border);
+  }
+  .journey-step {
+    text-align: center;
+    position: relative;
+    z-index: 1;
+  }
+  .journey-dot {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--bg-card);
+    border: 2px solid var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    margin: 0 auto 16px;
+    transition: all 0.2s;
+  }
+  .journey-step:hover .journey-dot {
+    background: var(--accent-bg);
+    transform: scale(1.1);
+  }
+  .journey-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+  .journey-desc-text {
+    font-size: 12px;
+    color: var(--text-secondary);
+    line-height: 1.4;
+    padding: 0 4px;
+  }
+  @media (max-width: 768px) {
+    .journey-steps {
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+    .journey-steps::before { display: none; }
+    .journey-step {
+      display: flex;
+      align-items: center;
+      text-align: left;
+      gap: 16px;
+    }
+    .journey-dot { margin: 0; flex-shrink: 0; }
+  }
+
+  /* ── PILLARS ─────────────────────────── */
+  .pillars-row {
+    display: flex;
+    gap: 12px;
+    margin-top: 48px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .pillar-chip {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 22px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    background: var(--bg-card);
+    transition: all 0.2s;
+  }
+  .pillar-chip:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+  }
+  .pillar-emoji { font-size: 20px; }
+  .pillar-name { font-size: 14px; font-weight: 600; }
+
+  /* ── FEATURES ────────────────────────── */
+  .features-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    margin-top: 56px;
+    align-items: center;
+  }
+  @media (max-width: 768px) {
+    .features-grid { grid-template-columns: 1fr; gap: 40px; }
+  }
+  .feature-list { display: flex; flex-direction: column; gap: 28px; }
+  .feature-item {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+  }
+  .feature-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: var(--accent-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+  }
+  .feature-text h3 {
+    font-family: 'Lora', Georgia, serif;
+    font-size: 17px;
+    font-weight: 600;
+    margin-bottom: 4px;
+    color: var(--text);
+  }
+  .feature-text p {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  /* ── PHONE MOCKUP ───────────────────── */
+  .phone-mockup {
+    width: 280px;
+    height: 560px;
+    background: var(--bg);
+    border-radius: 36px;
+    border: 2px solid var(--border);
+    overflow: hidden;
+    box-shadow: 0 32px 64px rgba(0,0,0,0.08);
+    margin: 0 auto;
+    position: relative;
+  }
+  .phone-mockup::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90px;
+    height: 22px;
+    background: var(--text);
+    border-radius: 0 0 12px 12px;
+    z-index: 2;
+  }
+  .phone-screen {
+    padding: 44px 20px 20px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+  .ps-logo {
+    width: 56px;
+    height: 56px;
+    border-radius: 16px;
+    background: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    margin-bottom: 16px;
+    color: white;
+  }
+  .ps-title {
+    font-family: 'Lora', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+  .ps-subtitle {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 20px;
+  }
+  .ps-pillars {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  .ps-pill {
+    background: var(--bg-section);
+    padding: 6px 10px;
+    border-radius: 16px;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+  .ps-btn {
+    background: var(--accent);
+    color: white;
+    border: none;
+    padding: 10px 28px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  /* ── QUOTE ──────────────────────────── */
+  .quote-section {
+    text-align: center;
+    padding: 100px 24px;
+    border-top: 1px solid var(--border-light);
+    border-bottom: 1px solid var(--border-light);
+  }
+  .quote-mark {
+    font-size: 48px;
+    color: var(--accent);
+    font-family: 'Lora', serif;
+    line-height: 1;
+    margin-bottom: 12px;
+  }
+  .quote-text {
+    font-family: 'Lora', Georgia, serif;
+    font-size: clamp(22px, 3vw, 32px);
+    font-weight: 400;
+    font-style: italic;
+    color: var(--text);
+    max-width: 600px;
+    margin: 0 auto 16px;
+    line-height: 1.4;
+  }
+  .quote-attr {
+    font-size: 14px;
+    color: var(--text-muted);
+    font-style: normal;
+    font-family: 'Inter', sans-serif;
+  }
+
+  /* ── PRICING ─────────────────────────── */
+  .pricing-cards {
+    display: flex;
+    gap: 24px;
+    justify-content: center;
+    margin-top: 48px;
+    flex-wrap: wrap;
+  }
+  .price-card {
+    background: var(--bg-card);
+    border-radius: 16px;
+    padding: 36px 28px;
+    text-align: center;
+    border: 1px solid var(--border);
+    width: 280px;
+    position: relative;
+    transition: all 0.2s;
+  }
+  .price-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 40px rgba(0,0,0,0.06);
+  }
+  .price-card.featured {
+    border-color: var(--accent);
+    box-shadow: 0 8px 24px rgba(125,166,125,0.12);
+  }
+  .price-badge {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--accent);
+    color: white;
+    padding: 4px 16px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .price-plan-name {
+    font-family: 'Lora', serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+  }
+  .price-amount {
+    font-family: 'Lora', serif;
+    font-size: 44px;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: -1px;
+  }
+  .price-period {
+    font-size: 14px;
+    color: var(--text-muted);
+    margin-bottom: 24px;
+  }
+  .price-features {
+    text-align: left;
+    list-style: none;
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin-bottom: 24px;
+    line-height: 2.2;
+  }
+  .price-features li::before {
+    content: '✓';
+    margin-right: 8px;
+    color: var(--accent);
+    font-weight: 600;
+  }
+  .price-card .btn-primary,
+  .price-card .btn-outline { width: 100%; justify-content: center; }
+
+  /* ── FINAL CTA ───────────────────────── */
+  .final-cta {
+    text-align: center;
+    padding: 100px 24px;
+    background: var(--accent);
+    color: white;
+  }
+  .final-cta .section-title { color: white; }
+  .final-cta .section-desc { color: rgba(255,255,255,0.75); margin: 0 auto 36px; }
+  .final-cta .btn-white {
+    background: white;
+    color: var(--accent-dark);
+    border: none;
+    padding: 18px 44px;
+    border-radius: 10px;
+    font-size: 17px;
+    font-weight: 700;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s;
+  }
+  .final-cta .btn-white:hover { transform: translateY(-2px); box-shadow: 0 12px 24px rgba(0,0,0,0.15); }
+  .final-cta .platforms {
+    margin-top: 16px;
+    font-size: 14px;
+    color: rgba(255,255,255,0.6);
+  }
+
+  /* ── FOOTER ──────────────────────────── */
+  footer {
+    padding: 40px 24px;
+    text-align: center;
+    border-top: 1px solid var(--border-light);
+    color: var(--text-secondary);
+    font-size: 14px;
+    background: var(--bg);
+  }
+  footer a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+  footer a:hover { text-decoration: underline; }
+  .footer-links {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    margin-bottom: 16px;
+  }
+  .footer-heart {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-top: 8px;
+  }
+
+  /* ── RESPONSIVE ─────────────────────── */
+  @media (max-width: 640px) {
+    nav { padding: 0 16px; }
+    section { padding: 72px 16px; }
+    .hero { padding: 120px 16px 72px; }
+    .pillars-row { gap: 8px; }
+    .pillar-chip { padding: 10px 14px; }
+    .pricing-cards { flex-direction: column; align-items: center; }
+    .price-card { width: 100%; max-width: 340px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── NAV ──────────────────────────────── -->
+<nav>
+  <a href="#" class="nav-brand">
+    <span class="nav-logo">🌱</span>
+    <span class="nav-name">Krese</span>
+  </a>
+  <div class="nav-links">
+    <a href="#journey" class="nav-link">Hoe het werkt</a>
+    <a href="#pricing" class="nav-link">Pricing</a>
+    <a href="#download" class="nav-cta">Download</a>
+  </div>
+</nav>
+
+<!-- ── HERO ─────────────────────────────── -->
+<section class="hero">
+  <div class="hero-badge">🌱 Nu beschikbaar</div>
+  <h1>Bon bini bij <em>Krese</em></h1>
+  <p class="hero-subtitle">
+    Een premium goal-setting app gebouwd rondom persoonlijke reflectie.
+    Reflecteer op het afgelopen jaar, definieer je eindstation, en werk gericht aan je doelen.
+  </p>
+  <div class="hero-cta-group">
+    <a href="#download" class="btn-primary">Download Krese</a>
+    <a href="#journey" class="btn-outline">Ontdek hoe het werkt</a>
+  </div>
+</section>
+
+<!-- ── THE KRESE JOURNEY ───────────────── -->
+<section id="journey" class="section-alt">
+  <div class="container">
+    <span class="section-eyebrow">Hoe het werkt</span>
+    <h2 class="section-title">Jouw reis met Krese</h2>
+    <p class="section-desc">
+      Krese is geen gewone to-do app. We begeleiden je door een persoonlijk reflectieproces dat leidt tot doelen die echt bij je passen.
+    </p>
+
+    <div class="journey-steps">
+      <div class="journey-step">
+        <div class="journey-dot">🔄</div>
+        <div>
+          <div class="journey-label">Reflecteer</div>
+          <div class="journey-desc-text">Kijk terug op overwinningen, gemiste kansen en uitdagingen.</div>
+        </div>
+      </div>
+      <div class="journey-step">
+        <div class="journey-dot">🔭</div>
+        <div>
+          <div class="journey-label">Definieer je visie</div>
+          <div class="journey-desc-text">Stel je langetermijn doelen per levenspijler.</div>
+        </div>
+      </div>
+      <div class="journey-step">
+        <div class="journey-dot">🎯</div>
+        <div>
+          <div class="journey-label">Stel jaardoelen</div>
+          <div class="journey-desc-text">Vertaal je visie naar concrete doelen.</div>
+        </div>
+      </div>
+      <div class="journey-step">
+        <div class="journey-dot">✅</div>
+        <div>
+          <div class="journey-label">Bouw gewoontes</div>
+          <div class="journey-desc-text">Dagelijkse gewoontes die je dichter bij je doelen brengen.</div>
+        </div>
+      </div>
+      <div class="journey-step">
+        <div class="journey-dot">📊</div>
+        <div>
+          <div class="journey-label">Volg voortgang</div>
+          <div class="journey-desc-text">Track streaks, meet voortgang, vier successen.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── 7 PILLARS ───────────────────────── -->
+<section>
+  <div class="container" style="text-align: center;">
+    <span class="section-eyebrow">Holistisch</span>
+    <h2 class="section-title">7 levenspijlers</h2>
+    <p class="section-desc" style="margin: 0 auto;">
+      Krese helpt je om balans te vinden in alle belangrijke onderdelen van je leven.
+    </p>
+
+    <div class="pillars-row">
+      <div class="pillar-chip">
+        <span class="pillar-emoji">⚕️</span>
+        <span class="pillar-name" style="color: var(--pillar-health);">Gezondheid</span>
+      </div>
+      <div class="pillar-chip">
+        <span class="pillar-emoji">🫶</span>
+        <span class="pillar-name" style="color: var(--pillar-relationships);">Relaties</span>
+      </div>
+      <div class="pillar-chip">
+        <span class="pillar-emoji">📈</span>
+        <span class="pillar-name" style="color: var(--pillar-growth);">Persoonlijke groei</span>
+      </div>
+      <div class="pillar-chip">
+        <span class="pillar-emoji">🌬️</span>
+        <span class="pillar-name" style="color: var(--pillar-spiritual);">Spiritueel</span>
+      </div>
+      <div class="pillar-chip">
+        <span class="pillar-emoji">💼</span>
+        <span class="pillar-name" style="color: var(--pillar-career);">Carrière</span>
+      </div>
+      <div class="pillar-chip">
+        <span class="pillar-emoji">💰</span>
+        <span class="pillar-name" style="color: var(--pillar-financial);">Financiën</span>
+      </div>
+      <div class="pillar-chip">
+        <span class="pillar-emoji">🏖️</span>
+        <span class="pillar-name" style="color: var(--pillar-fun);">Plezier &amp; recreatie</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FEATURES + PHONE MOCKUP ─────────── -->
+<section class="section-alt">
+  <div class="container">
+    <div class="features-grid">
+      <div>
+        <span class="section-eyebrow">Functies</span>
+        <h2 class="section-title">Alles wat je nodig hebt om te groeien</h2>
+        <p class="section-desc" style="margin-bottom: 36px;">
+          Van reflectie tot actie — Krese begeleidt je bij elke stap.
+        </p>
+
+        <div class="feature-list">
+          <div class="feature-item">
+            <div class="feature-icon">🪞</div>
+            <div class="feature-text">
+              <h3>Persoonlijke reflectie</h3>
+              <p>Kijk terug op je overwinningen, gemiste kansen en uitdagingen. Reflectie is de fundering voor je doelen.</p>
+            </div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">🔭</div>
+            <div class="feature-text">
+              <h3>5-jaar visie</h3>
+              <p>Definieer je eindstation per levenspijler. Dit is een belofte die je jezelf doet.</p>
+            </div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">🎯</div>
+            <div class="feature-text">
+              <h3>Concrete jaardoelen</h3>
+              <p>Vertaal je langetermijn visie naar haalbare doelen met stappen en deadlines.</p>
+            </div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">✅</div>
+            <div class="feature-text">
+              <h3>Dagelijkse gewoontes</h3>
+              <p>Track je gewoontes, bouw streaks op en word consistent in je groei.</p>
+            </div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">🔔</div>
+            <div class="feature-text">
+              <h3>Slimme herinneringen</h3>
+              <p>Dagelijkse push notificaties op jouw tijdstip. Vergeet nooit je gewoontes.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="phone-mockup">
+        <div class="phone-screen">
+          <div class="ps-logo">🌱</div>
+          <div class="ps-title">Bon bini bij Krese</div>
+          <div class="ps-subtitle">Begin een reis samen met ons, waarbij je stapsgewijs duidelijkheid krijgt over je lange termijn doelen.</div>
+          <div class="ps-pillars">
+            <span class="ps-pill">⚕️ Gezondheid</span>
+            <span class="ps-pill">🫶 Relaties</span>
+            <span class="ps-pill">📈 Groei</span>
+            <span class="ps-pill">💼 Carrière</span>
+            <span class="ps-pill">💰 Financiën</span>
+            <span class="ps-pill">🏖️ Plezier</span>
+          </div>
+          <button class="ps-btn">Start</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── QUOTE ────────────────────────────── -->
+<div class="quote-section">
+  <div class="quote-mark">"</div>
+  <blockquote class="quote-text">
+    Reflectie is realisatie, realisatie leidt tot actie.
+  </blockquote>
+  <p class="quote-attr">— De filosofie achter Krese</p>
+</div>
+
+<!-- ── PRICING ─────────────────────────── -->
+<section class="section-alt" id="pricing">
+  <div class="container" style="text-align: center;">
+    <span class="section-eyebrow">Pricing</span>
+    <h2 class="section-title">Investeer in jezelf</h2>
+    <p class="section-desc" style="margin: 0 auto;">
+      Begin gratis en upgrade naar Krese Pro wanneer je er klaar voor bent.
+    </p>
+
+    <div class="pricing-cards">
+      <div class="price-card">
+        <div class="price-plan-name">Gratis</div>
+        <div class="price-amount">€0</div>
+        <div class="price-period">voor altijd</div>
+        <ul class="price-features">
+          <li>Volledig reflectieproces</li>
+          <li>Langetermijn doelen</li>
+          <li>Jaardoelen met stappen</li>
+          <li>Dagelijkse gewoontes</li>
+          <li>Dagelijkse herinnering</li>
+        </ul>
+        <a href="#download" class="btn-outline">Start gratis</a>
+      </div>
+
+      <div class="price-card featured">
+        <div class="price-badge">Bespaar 16%</div>
+        <div class="price-plan-name">Krese Pro</div>
+        <div class="price-amount">€20</div>
+        <div class="price-period">per jaar (€1,67/maand)</div>
+        <ul class="price-features">
+          <li>Alles uit gratis, plus:</li>
+          <li>AI doelformulering</li>
+          <li>Visie naar jaardoelen</li>
+          <li>Voortgangsinzichten</li>
+          <li>Dagelijkse reflectie</li>
+        </ul>
+        <a href="#download" class="btn-primary">Start Pro</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FINAL CTA ───────────────────────── -->
+<section class="final-cta" id="download">
+  <div class="container">
+    <h2 class="section-title">Klaar om te groeien?</h2>
+    <p class="section-desc">
+      Download Krese en begin vandaag met het bouwen aan jouw toekomst.<br>
+      Let's krese together.
+    </p>
+    <a href="#" class="btn-white">Download Krese</a>
+    <p class="platforms">Beschikbaar voor iOS, Android en Web</p>
+  </div>
+</section>
+
+<!-- ── FOOTER ──────────────────────────── -->
+<footer>
+  <div class="footer-links">
+    <a href="#">Privacy Policy</a>
+    <a href="#">Voorwaarden</a>
+    <a href="#">Contact</a>
+  </div>
+  <p>&copy; 2026 Krese. Alle rechten voorbehouden.</p>
+  <p class="footer-heart">Made with ❤️ in Curaçao</p>
+</footer>
+
+</body>
+</html>
